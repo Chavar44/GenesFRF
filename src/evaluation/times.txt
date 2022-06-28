@@ -1,0 +1,5 @@
+Number of Genes: 10
+Number of Samples: 20
+Time Genie3 takes: 6.6968913078308105
+Time the federated approach takes: 9.92996621131897 
+Time Evaluation takes: 0.00698089599609375 
