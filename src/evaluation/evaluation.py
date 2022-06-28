@@ -1,4 +1,4 @@
-from genie3.GENIE3 import *
+from /GenesFRF/GenesFRF/genie3.GENIE3 import *
 from src.python_implementation.main import *
 from sklearn.metrics import *
 import numpy as np
