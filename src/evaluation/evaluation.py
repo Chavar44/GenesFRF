@@ -1,6 +1,6 @@
 import sys
-sys.path.append('~/GenesFRF/GenesFRF/genie3')
-from genie3 import GENIE3.py
+sys.path.append('~/GenesFRF/GenesFRF')
+from genie3 import GENIE3
 from src.python_implementation.main import *
 from sklearn.metrics import *
 import numpy as np
