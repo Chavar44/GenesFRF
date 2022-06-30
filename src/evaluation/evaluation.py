@@ -1,7 +1,6 @@
-import sys
-sys.path.append('~/GenesFRF/GenesFRF')
+
 from genie3 import GENIE3
-from src.python_implementation.main import *
+from main import *
 from sklearn.metrics import *
 import numpy as np
 from matplotlib import pyplot as plt
@@ -27,7 +26,7 @@ def calculate_confusion_matrix(edges_genie3, edges_federated, num_total):
     return tp, fp, fn, tn
 
 
-data_path = "C:/HMDA/Proyecto Random Forest/repository/federated-inference-of-grns/genie3/TCGA-COAD.htseq_fpkm.tsv"
+data_path = "TCGA-COAD.htseq_fpkm.tsv"
 data = import_data(data_path)
 
 # run GENIE3
