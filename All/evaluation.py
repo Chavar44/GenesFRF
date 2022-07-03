@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 Number_of_Genes=20
 # data_path = "/media/sf_Projekt_BIONETS/federated-inference-of-grns/genie3/data.txt"
 logger.info('Loading Dataset')
-data_path = 'C:/HMDA/Proyecto Random Forest/repository/federated-inference-of-grns/genie3/TCGA-COAD.htseq_fpkm.tsv'
+
 data = import_data(data_path)[:, :Number_of_Genes]
 
 # run GENIE3
