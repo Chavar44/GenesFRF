@@ -13,7 +13,7 @@ log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 logging.basicConfig(level=logging.INFO, format=log_fmt)
 
 logger = logging.getLogger(__name__)
-Number_of_Genes=20
+Number_of_Genes=500
 # data_path = "/media/sf_Projekt_BIONETS/federated-inference-of-grns/genie3/data.txt"
 logger.info('Loading Dataset')
 
@@ -92,6 +92,6 @@ plt.savefig("precision_recall_f1_scores")
 plt.show()
 
 f = open('times.txt', 'w')
-f.write("Number of Genes: %d\nTime Genie3 takes: %s\nTime the federated approach takes: %s\nTime evaluation takes: %s" % (
+f.write("Number of Genes: %d\nTime Genie3 takes: %s\nTime the federated approach takes: %s\nTime evaluation takes: %s\n" % (
     (Number_of_Genes),(end_genie3 - start_genie3), (end_federated - start_federated),(end_evaluation-start_evaluation)))
 f.close()
