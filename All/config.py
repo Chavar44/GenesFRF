@@ -3,7 +3,7 @@ path_transcription_factors = 'Regulators.txt'
 path_to_genie3_R = 'Genie3.R'
 data_path_to_VIM_matrices = ""
 
-number_trees = 500
+number_trees = 1000
 tree_method = "RF"
 
 number_of_hospitals = 3
