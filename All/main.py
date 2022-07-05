@@ -1,20 +1,39 @@
 import numpy as np
 import config
+
 from sklearn.tree import BaseDecisionTree
 from sklearn.ensemble import RandomForestRegressor
 from operator import itemgetter
 
 
-def import_data(path):
+def import_data(path, path_tf=None):
     """
     This function loads the Data from a given path into a numpy array
 
     :param path: the path to the data given as tsv file
+    :param path_tf: if given a path to the transcription factors, they will be loaded as well as the gene_names
 
-    :return data: numpy array with data
+    :return data: numpy array with data, gene_names(optional), transcription factors(optional)
     """
-    data = np.loadtxt(path, dtype=str, skiprows=1)[:, 1:].astype(float)
-    return data.T
+    if path_tf is not None:
+        data = np.loadtxt(path, dtype=str, skiprows=1)
+
+        raw_gene_names = data[:, :1]
+        #Transform raw_gene_names into a list readable by the federated random forest approach
+        gene_names = []
+        for xs in raw_gene_names:
+            for x in xs:
+                gene_names.append(x[0:15])
+
+
+        data = data[:, 1:].astype(float)
+
+        tf = np.loadtxt(path_tf, dtype=str)
+
+        return data.T, gene_names, tf.tolist()
+    else:
+        data = np.loadtxt(path, dtype=str, skiprows=1)[:, 1:].astype(float)
+        return data.T
 
 
 def simulate_different_hospitals(data):
@@ -147,7 +166,8 @@ def train_local_rf(local_data, std_federated, gene_names=None, regulators='all')
 
         output = local_data[:, i]
 
-        output = output / std_federated[i]
+        if std_federated[i] != 0:
+            output = output / std_federated[i]
 
         # calculation of the indexes to be checked
         if regulators == 'all':

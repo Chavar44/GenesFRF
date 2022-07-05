@@ -1,41 +1,46 @@
 
 from GENIE3 import GENIE3
 from main import *
+import config
 from sklearn.metrics import mean_squared_error
 import numpy as np
 from matplotlib import pyplot as plt
 import time
 import logging
-
-data_path = "TCGA-COAD.htseq_fpkm.tsv"
+import subprocess
+import os
 
 log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 logging.basicConfig(level=logging.INFO, format=log_fmt)
-
 logger = logging.getLogger(__name__)
-Number_of_Genes=500
-# data_path = "/media/sf_Projekt_BIONETS/federated-inference-of-grns/genie3/data.txt"
-logger.info('Loading Dataset')
 
-data = import_data(data_path)[:, :Number_of_Genes]
+
+logger.info('Loading Dataset')
+data, gene_names, transcription_factors = import_data(config.data_path, config.path_transcription_factors)
+#data = data[:, :80]
 
 # run GENIE3
 logger.info('Run Genie3')
 start_genie3 = time.time()
-VIM_genie3 = GENIE3(data)
+cmd = ['Rscript', config.path_to_genie3_R]
+x = subprocess.check_output(cmd, universal_newlines=True)
+logger.info('Terminated Genie3 with exit code ', x)
 end_genie3 = time.time()
 
 # run federated method
 logger.info('Run Federated Approach')
 hospital_data = simulate_different_hospitals(data)
-start_federated = time.time()
-vim_federated = train(hospital_data)
-end_federated = time.time()
 
-# save VIM's
-logger.info('saving VIM-matrices')
-np.savetxt('VIM_genie3.csv', VIM_genie3, delimiter=',')
+start_federated = time.time()
+vim_federated = train(hospital_data, gene_names=gene_names, regulators=transcription_factors)
+end_federated = time.time()
+# save VIM federated
+logger.info('saving VIM-matrix from federated approach')
 np.savetxt('VIM_federated.csv', vim_federated, delimiter=',')
+
+logger.info('loading VIM matrix from Genie3')
+path = os.path.join(config.data_path_to_VIM_matrices, "Weight_Matrix.csv")
+VIM_genie3 = np.loadtxt(path, dtype=str, delimiter=",").astype(float)
 
 logger.info('calculate mse')
 mse = mean_squared_error(VIM_genie3, vim_federated)
@@ -46,7 +51,6 @@ edges_genie3 = get_linked_list_federated(VIM_genie3, printing=False)
 edges_federated = get_linked_list_federated(vim_federated, printing=False)
 
 logger.info('calculate precision, recall and f1 score')
-start_evaluation = time.time()
 f1 = [0]
 precision = [0]
 recall = [0]
@@ -80,7 +84,7 @@ for i in range(0, num_total):
         f1.append(2 * (precision[i] * recall[i]) / (precision[i] + recall[i]))
     else:
         f1.append(0)
-end_evaluation = time.time()
+
 # fig = plt.figure(1)
 x = np.arange(0, len(edges_federated)+1)
 plt.plot(x, precision, label='precision')
@@ -92,6 +96,6 @@ plt.savefig("precision_recall_f1_scores")
 plt.show()
 
 f = open('times.txt', 'w')
-f.write("Number of Genes: %d\nTime Genie3 takes: %s\nTime the federated approach takes: %s\nTime evaluation takes: %s\n" % (
-    (Number_of_Genes),(end_genie3 - start_genie3), (end_federated - start_federated),(end_evaluation-start_evaluation)))
+f.write("Time Genie3 takes: %s\nTime the federated approach takes: %s" % (
+        (end_genie3 - start_genie3), (end_federated - start_federated)))
 f.close()
