@@ -7,7 +7,7 @@ library(GENIE3)
 set.seed(123)   #For reproducibility purposes
 
 #Read File
-path = "TCGA-COAD.htseq_fpkm.tsv"
+path = "TCGA-COAD.htseq_fpkm.tsvad"
 OGFile = read.table(path,fileEncoding="latin1",sep="\t")
 
  #transpose matrix
