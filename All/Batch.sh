@@ -1,7 +1,7 @@
 #!/bin/bash -l
 #
-# allocate 1 node (4 Cores) for 60 hours
-#PBS -l nodes=1:ppn=4,walltime=60:00:00
+# allocate 1 node (4 Cores) for 50 hours
+#PBS -l nodes=1:ppn=4,walltime=50:00:00
 #
 # job name 
 #PBS -N GenesFRF1
