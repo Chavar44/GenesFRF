@@ -43,7 +43,7 @@ weightMat = GENIE3(GeneMat,verbose=TRUE, regulators = Regulators)
 #matrix export
 #exportpath = "C:/HMDA/Proyecto Random Forest/repository/federated-inference-of-grns/src/evaluation/Data.csv"
 #write.csv(Data,exportpath,row.names=FALSE)
-exportpath = "WeightMatrix.csv"
+exportpath = "Weight_Matrix.csv"
 write.csv(weightMat,exportpath,row.names=FALSE)
 
 
