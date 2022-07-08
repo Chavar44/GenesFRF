@@ -33,7 +33,7 @@ colnames(GeneT) = GeneT[1,]
 #Eliminate "Ensemble_Id" from the matrix
 GeneT[1,] = GeneT[2,]
 GeneT[,1] = GeneT[,2]
-GeneMat = GeneT[2:rownum,2:colnum] #Final Matrix
+GeneMat = GeneT[2:81,2:colnum] #Final Matrix
 
 #Read Regulators
 path = "Regulators.txt"
@@ -41,7 +41,8 @@ Regulators = read.table(path,fileEncoding="latin1",sep="\n")
 Regulators = Regulators[,1]
 
 #Implementation of GENIE3
-weightMat = GENIE3(GeneMat,verbose=TRUE, regulators = Regulators,nCores=2)
+#weightMat = GENIE3(GeneMat,verbose=TRUE, regulators = Regulators,nCores=4)
+weightMat = GENIE3(GeneMat,verbose=TRUE,nCores=4)
 
 #matrix export
 #exportpath = "C:/HMDA/Proyecto Random Forest/repository/federated-inference-of-grns/src/evaluation/Data.csv"
