@@ -1,7 +1,7 @@
 #!/bin/bash -l
 #
-# allocate 1 node (4 Cores) for 48 hours
-#PBS -l nodes=1:ppn=4,walltime=48:00:00
+# allocate 4 nodes (80 Cores) for 24 hours
+#PBS -l nodes=4:ppn=40,walltime=24:00:00
 #
 # job name 
 #PBS -N GenesFRF1
@@ -9,7 +9,6 @@
 # first non-empty non-comment line ends PBS options
 
 #load required modules (compiler, ...)
-module load python
 module load r/4.0.2-mro
 
 # jobs always start in $HOME - 
@@ -18,5 +17,7 @@ cd  /home/woody/iwbn/iwbn001h/GenesFRF/All
 
  
 # run 
-python evaluation.py
+Rscript Genie3.R
+
+
 
