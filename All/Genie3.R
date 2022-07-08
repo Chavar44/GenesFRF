@@ -41,7 +41,7 @@ Regulators = read.table(path,fileEncoding="latin1",sep="\n")
 Regulators = Regulators[,1]
 
 #Implementation of GENIE3
-weightMat = GENIE3(GeneMat,verbose=TRUE, regulators = Regulators,nCores=8)
+weightMat = GENIE3(GeneMat,verbose=TRUE, regulators = Regulators,nCores=2)
 
 #matrix export
 #exportpath = "C:/HMDA/Proyecto Random Forest/repository/federated-inference-of-grns/src/evaluation/Data.csv"
