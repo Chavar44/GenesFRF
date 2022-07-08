@@ -40,7 +40,7 @@ Regulators = read.table(path,fileEncoding="latin1",sep="\n")
 Regulators = Regulators[,1]
 
 #Implementation of GENIE3
-weightMat = GENIE3(GeneMat,verbose=TRUE, regulators = Regulators,nCores=12)
+weightMat = GENIE3(GeneMat,verbose=TRUE, regulators = Regulators,nCores=12 )
 
 
 #matrix export
