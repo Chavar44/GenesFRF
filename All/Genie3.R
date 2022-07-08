@@ -4,7 +4,6 @@ library(GENIE3)
 #Following libraries are used for multi-core processing STILL DOESN'T WORK D:
 library(doParallel)
 library(foreach)
-#library(plyr)
 library(doRNG)
 
 set.seed(123)   #For reproducibility purposes
@@ -41,7 +40,7 @@ Regulators = read.table(path,fileEncoding="latin1",sep="\n")
 Regulators = Regulators[,1]
 
 #Implementation of GENIE3
-weightMat = GENIE3(GeneMat,verbose=TRUE, regulators = Regulators,nCores=4)
+weightMat = GENIE3(GeneMat,verbose=TRUE, regulators = Regulators,nCores=8)
 
 
 #matrix export
