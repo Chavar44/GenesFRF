@@ -4,6 +4,7 @@ import config
 from sklearn.tree import BaseDecisionTree
 from sklearn.ensemble import RandomForestRegressor
 from operator import itemgetter
+import logging
 
 
 def import_data(path, path_tf=None):
@@ -227,6 +228,11 @@ def train(data_hospitals, gene_names=None, regulators='all'):
     -------
         the Feature Importance of the global model
     """
+    log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    logging.basicConfig(level=logging.INFO, format=log_fmt)
+    logger = logging.getLogger(__name__)
+
+
     # TODO: check input!
     # train all local models
     local_feature_importances = []
@@ -236,7 +242,7 @@ def train(data_hospitals, gene_names=None, regulators='all'):
     std_federated = scaling_of_colums(data_hospitals, number_genes)
 
     for index, data in enumerate(data_hospitals):
-        print("Hospital %d/%d..." % (index + 1, config.number_of_hospitals))
+        logger.info("Hospital %d/%d..." % (index + 1, config.number_of_hospitals))
         local_feature_importances.append(train_local_rf(data, std_federated, gene_names, regulators))
 
     # Calculate the weight of the data of each Hospital
