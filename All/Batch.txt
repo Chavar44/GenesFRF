@@ -22,3 +22,7 @@ python evaluation.py
 
 
 
+#Start 10:25
+#end 6:54 next day
+# ~21 hours with 12 cores
+#weight Matrix size = 1.9 Gb
