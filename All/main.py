@@ -133,7 +133,9 @@ def train_local_rf(local_data, std_federated, gene_names=None, regulators='all')
     -------
         The local trained feature importances
     """
-
+    log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    logging.basicConfig(level=logging.INFO, format=log_fmt)
+    logger = logging.getLogger(__name__)
     # TODO: check input
     if not isinstance(local_data, np.ndarray):
         raise ValueError(
@@ -163,7 +165,7 @@ def train_local_rf(local_data, std_federated, gene_names=None, regulators='all')
 
     trees = []
     for i in range(number_genes):
-        print('\tGene %d/%d...' % (i + 1, number_genes))
+        logger.info('\tGene %d/%d...' % (i + 1, number_genes))
 
         output = local_data[:, i]
 
