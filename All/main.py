@@ -4,7 +4,7 @@ import config
 from sklearn.tree import BaseDecisionTree
 from sklearn.ensemble import RandomForestRegressor
 from operator import itemgetter
-import logging
+
 
 
 def import_data(path, path_tf=None):
@@ -24,7 +24,7 @@ def import_data(path, path_tf=None):
         gene_names = []
         for xs in raw_gene_names:
             for x in xs:
-                gene_names.append(x[0:15])
+                gene_names.append(x[0:15]) #Only reads the first 15 characters in order to correctly compare to the Regulators.txt file
 
 
         data = data[:, 1:].astype(float)
@@ -133,9 +133,7 @@ def train_local_rf(local_data, std_federated, gene_names=None, regulators='all')
     -------
         The local trained feature importances
     """
-    log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-    logging.basicConfig(level=logging.INFO, format=log_fmt)
-    logger = logging.getLogger(__name__)
+
     # TODO: check input
     if not isinstance(local_data, np.ndarray):
         raise ValueError(
@@ -163,9 +161,11 @@ def train_local_rf(local_data, std_federated, gene_names=None, regulators='all')
             if not s_intersection:
                 raise ValueError('the genes must contain at least one candidate regulator')
 
-    trees = []
+    # feature importance matrix
+    feature_importance_matrix = np.zeros((number_genes, number_genes))
+
     for i in range(number_genes):
-        logger.info('\tGene %d/%d...' % (i + 1, number_genes))
+        print('\tGene %d/%d...' % (i + 1, number_genes))
 
         output = local_data[:, i]
 
@@ -189,18 +189,10 @@ def train_local_rf(local_data, std_federated, gene_names=None, regulators='all')
 
         # Learn ensemble of trees
         tree_estimator.fit(expr_data_input, output)
-        trees.append(tree_estimator)
 
-    # calculate feature importance
-    feature_importance_matrix = np.zeros((number_genes, number_genes))
-
-    # calculate the feature importance for each gene
-    for i in range(number_genes):
-        feature_importance = compute_feature_importance(trees[i])
+        # calculate the feature importance for each gene
+        feature_importance = compute_feature_importance(tree_estimator)
         vi = np.zeros(number_genes)
-        input_idx = list(range(number_genes))
-        if i in input_idx:
-            input_idx.remove(i)
         vi[input_idx] = feature_importance
         # put feature importance into matrix
         feature_importance_matrix[i, :] = vi
@@ -230,11 +222,6 @@ def train(data_hospitals, gene_names=None, regulators='all'):
     -------
         the Feature Importance of the global model
     """
-    log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-    logging.basicConfig(level=logging.INFO, format=log_fmt)
-    logger = logging.getLogger(__name__)
-
-
     # TODO: check input!
     # train all local models
     local_feature_importances = []
@@ -244,7 +231,7 @@ def train(data_hospitals, gene_names=None, regulators='all'):
     std_federated = scaling_of_colums(data_hospitals, number_genes)
 
     for index, data in enumerate(data_hospitals):
-        logger.info("Hospital %d/%d..." % (index + 1, config.number_of_hospitals))
+        print("Hospital %d/%d..." % (index + 1, config.number_of_hospitals))
         local_feature_importances.append(train_local_rf(data, std_federated, gene_names, regulators))
 
     # Calculate the weight of the data of each Hospital
