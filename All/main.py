@@ -233,7 +233,7 @@ def train(data_hospitals, gene_names=None, regulators='all'):
     for index, data in enumerate(data_hospitals):
         print("Hospital %d/%d..." % (index + 1, config.number_of_hospitals))
         local_feature_importances.append(train_local_rf(data, std_federated, gene_names, regulators))
-        FILE_NAME = "VIM_H" + str(index) + ".csv"
+        FILE_NAME = "VIM_H" + str(index+1) + ".csv"
         np.savetxt(FILE_NAME, local_feature_importances[index], delimiter=',')
     # Calculate the weight of the data of each Hospital
     VIM = np.zeros(local_feature_importances[0].shape)
